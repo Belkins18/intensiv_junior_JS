@@ -1,32 +1,35 @@
-let week = ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота', 'Воскресенье'];
+let arr = {
+    first: ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота', 'Воскресенье'],
+    second: ['13414235', '37628476826491', '782734523', '7465816294', '928305027', '5392507458', '83874535']
+};
 
-for (let i = 0; i <= week.length - 1; i++) {
-    if (week[i] === 'Четверг') {
-        document.write('<em>' + week[i] + '</em><br>')
-    } else
-    if (week[i] === 'Суббота' || week[i] === 'Воскресенье') {
-        document.write('<b>' + week[i] + '</b> <br>')
-    } else {
-        document.write(week[i] + '<br>')
+let week = (arr) => {
+    for (let i = 0; i <= arr.length - 1; i++) {
+        if (arr[i] === 'Четверг') {
+            document.write('<em>' + arr[i] + '</em><br>')
+        } else
+        if (arr[i] === 'Суббота' || arr[i] === 'Воскресенье') {
+            document.write('<b>' + arr[i] + '</b><br>')
+        } else {
+            document.write(arr[i] + '<br>')
+        }
     }
-}
+};
+
+let numbersWrite = (arr) => {
+    document.write('------------------------------------<br>');
+    arr.forEach( (item) => {
+        if ((item.split('')[0] === '3') || (item.split('')[0] === '7')) {
+            document.write(`${item}<br>`);
+        }
+    });
+};
+
+week(arr.first);
+numbersWrite(arr.second);
 
 
-console.log('-------------------------------------------------');
 
 
-// function random(val,min,max,l)
-//     {var arr = [],m = [],n = void(0), len = max-min;
-//         l--;
-//         if (len < l) return;
-//         for (var i=0; i<= len; i++){
-//             m[i] = i + min;
-//             m[i] == val && (n = i);
-//         }
-//         n !=  void(0) &&  m.splice(n,1)
-//         for (var i=0; i<l; i++) {n = Math.floor(Math.random()*(m.length)); arr[i]=m.splice(n,1);};
-//         n = Math.floor(Math.random()*(arr.length));
-//         arr.splice(n,0,val)
-//         return arr
-// }
-// document.write(random(3,0,20,4))
+
+
