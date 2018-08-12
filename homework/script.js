@@ -61,11 +61,7 @@ let budget = (str = 'Ваш бюджет на месяц?', defaultValue = 45000
         Иначе делаем рекурсию и повторно вызываем budget();
     */
     let budgetPrompt = parseFloat(prompt(str, defaultValue));
-    if (!isNaN(budgetPrompt)) {
-        return budgetPrompt;
-    } else {
-        return budget();
-    }
+    return (!isNaN(budgetPrompt)) ? budgetPrompt : budget();
 };
 //--------
 /*
@@ -81,11 +77,7 @@ let budget = (str = 'Ваш бюджет на месяц?', defaultValue = 45000
 */
 let marketName = function (str = 'Название вашего магазина?', defaultValue = 'Aclon') {
     let marketNamePrompt = prompt(str, defaultValue);
-    if (marketNamePrompt != '' && marketNamePrompt !== null) {
-        return marketNamePrompt;
-    } else {
-        return marketName();
-    }
+    return (marketNamePrompt != '' && marketNamePrompt !== null) ? marketNamePrompt : marketName();
 };
 //--------
 /*
@@ -103,15 +95,13 @@ let marketName = function (str = 'Название вашего магазина
 */
 let shopGoods = (str = 'Какой тип товаров будем продавать?', count = 3) => {
     let res = [];
-    let cur = [];
     let i = res.length;
 
     while (i < count) {
         let question = prompt(str);
 
         if (question !== null && question != '' && (question.replace(/\s/g,'')!='')) {
-            cur[i] = question;
-            res.push(cur[i]);
+            res.push(question);
             i++;
         }
     }
@@ -129,16 +119,23 @@ let shopGoods = (str = 'Какой тип товаров будем продав
     return res;
 };
 //--------
-let employers = [
-    {
-        name: 'Vova iz Lvova',
-        position: 'director',
-    },
-    {
-        name: 'Alesh Popovich',
-        position: 'seller',
-    },
-];
+let employers = (str = 'Введите имя сотрудника: ', count = 4) => {
+    let res = [];
+    let i = res.length;
+
+    while (i < count) {
+        let emploersObj = {};
+        let nemePerson = prompt(str);
+
+        if (nemePerson !== null && nemePerson != '' && (nemePerson.replace(/\s/g,'')!='')) {
+            emploersObj.no = i + 1;
+            emploersObj.name = nemePerson;
+            res.push(emploersObj);
+            i++;
+        }
+    }
+    return res;
+};
 
 let mainList = {
     budget: budget(),
@@ -147,8 +144,13 @@ let mainList = {
     },
     marketName: marketName(),
     shopGoods: shopGoods(),
-    employers: employers,
-    open: false
+    employers: employers(),
+    open: false,
+    discount: false,
+    priceCalc: function (price = 25000) {
+        console.log (this.discount);
+        return (!this.discount) ? price : (price * 80) / 100;
+    },
 };
 
 
@@ -165,6 +167,8 @@ if (time < 0) {
 
 console.log(`
 Мой бюджет на 1 день: ${mainList.budgetForDay()}
+Дисконтной система: ${mainList.discount}
+Цена к оплате: ${mainList.priceCalc()}
 `);
 
 console.log(mainList);
