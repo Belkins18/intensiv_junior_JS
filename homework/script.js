@@ -185,7 +185,7 @@ let mainList = {
             let addAnother = prompt(str2, '');
             if (addAnother != '' && addAnother !== null) {
                 this.shopItems.push(addAnother);
-            }
+            } else { return addAnother}
             this.shopItems.sort();
         } else {
             this.setShopItems();
@@ -226,9 +226,27 @@ let render_price = new Vue({
         pricelist: 'У нас вы можете купить:',
         shoplist: 'Наш магазин включает в себя:',
         object: mainList,
+        isVisible: false,
+        buttonName: ['Start Render', 'Rerender']
+        
     },
-    beforeCreate() {
-        mainList.setShopItems();
-        dayFour();
+    methods: {
+        startRender: function(evt) {
+            console.clear();
+            this.initData();
+            return this.isVisible = true;
+        },
+        hideResultRender: function () {
+            return this.isVisible = false;
+        },
+        initData: function() {
+            mainList.setShopItems();
+            dayFour();
+        },
     },
+    computed: {
+        button: function () {
+            return (this.isVisible !== true) ? this.buttonName[0] : this.buttonName[1];
+        }
+    }
 })

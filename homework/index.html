@@ -5,24 +5,33 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <script src="../lib/vue.min.js"></script>
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-    <div id='render_price' class='render'>
-        <p>{{ pricelist }}</p>
-        <ul class='render__list'>
+    <div class="container">
+        <div id='render_price' class='render'>
 
-            <li class='render__item' v-for="(item, index) in object.shopItems">
-                {{index + 1}} - {{ item }}
-            </li>
-        </ul>
+            <div v-bind:class="[isVisible ? 'visibleClass' : 'hiddenClass']">
+                <p>{{ pricelist }}</p>
+                <ul class='render__list'>
 
-        <p>{{ shoplist }}</p>
-        <ul class='render__list'>
-            <li class='render__item' v-for="(value, key, index) in object">
-                {{index + 1}} - {{ key }}
-            </li>
-        </ul>
+                    <li class='render__item' v-for="(item, index) in object.shopItems">
+                        {{index + 1}} - {{ item }}
+                    </li>
+                </ul>
+
+                <p>{{ shoplist }}</p>
+                <ul class='render__list'>
+                    <li class='render__item' v-for="(value, key, index) in object">
+                        {{index + 1}} - {{ key }}
+                    </li>
+                </ul>
+            </div>
+
+            <button v-on:click.prevent="startRender">{{ button }}</button>
+            <button v-if="isVisible === true" v-on:click.prevent="hideResultRender">Hide render</button>
+        </div>
     </div>
 </body>
 
