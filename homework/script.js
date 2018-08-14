@@ -46,7 +46,7 @@ let budget,
     price;
 
 let mainList = {
-    init: function() {
+    init: function () {
         this.setBudget();
         this.setBudgetForDay();
         this.setShopName();
@@ -118,7 +118,7 @@ let mainList = {
         while (i < count) {
             let question = prompt(str);
 
-            if (question !== null && question != '' && (question.replace(/\s/g,'')!='')) {
+            if (question !== null && question != '' && (question.replace(/\s/g, '') != '')) {
                 res.push(question);
                 i++;
             }
@@ -135,7 +135,7 @@ let mainList = {
             let emploersObj = {};
             let namePerson = prompt(str);
 
-            if (namePerson !== null && namePerson != '' && (namePerson.replace(/\s/g,'')!='')) {
+            if (namePerson !== null && namePerson != '' && (namePerson.replace(/\s/g, '') != '')) {
                 emploersObj.no = i + 1;
                 emploersObj.name = namePerson;
                 res.push(emploersObj);
@@ -164,7 +164,7 @@ let mainList = {
     },
 
     getPriceCalc: function (price = 25000) {
-        console.log (this.discount);
+        console.log(this.discount);
         if (!this.discount) {
             this.price = price;
             return this.price
@@ -178,32 +178,57 @@ let mainList = {
         //     (this.price = (price * 80) / 100, this.price);
     },
 
-    setShopItems: function (str = 'Товары через запятую') {
+    setShopItems: function (str = 'Товары через запятую', str2 = 'Погодите, добавьте еще') {
         let items = prompt(str, '');
-        this.shopItems = items.split(',');
-        this.shopItems.push(prompt('Погодите, добавьте еще', ''));
-        this.shopItems.sort();
+        if (items != '' && items !== null) {
+            this.shopItems = items.split(',');
+            let addAnother = prompt(str2, '');
+            if (addAnother != '' && addAnother !== null) {
+                this.shopItems.push(addAnother);
+            }
+            this.shopItems.sort();
+        } else {
+            this.setShopItems();
+        }
+        
     },
 };
 
 
 let dayFour = (obj = mainList) => {
-    obj.setShopItems();
-    obj.setShopGoods();
     let arr1 = obj.shopItems;
-    let arr2 = obj.shopGoods;
     let str1 = 'У нас вы можете купить:';
     let str2 = 'Наш магазин включает в себя:';
 
-    let consoleFunction = (str, arr) => {
+    let consoleFunction_1 = (str, arr) => {
         console.log(str);
-        arr.forEach(function(item, i) {
+        arr.forEach(function (item, i) {
             console.log(`${(i + 1)}: ${item}`);
         });
     };
 
-    consoleFunction(str1, arr1);
-    consoleFunction(str2, arr2);
+    let consoleFunction_2 = (str = str2) => {
+        console.log(str);
+        let i = 0;
+        for (let key in obj) {
+            console.log(`${++i}: ${key}`);
+        }
+    };
+
+    consoleFunction_1(str1, arr1);
+    consoleFunction_2();
 };
 
-dayFour();
+
+let render_price = new Vue({
+    el: '#render_price',
+    data: {
+        pricelist: 'У нас вы можете купить:',
+        shoplist: 'Наш магазин включает в себя:',
+        object: mainList,
+    },
+    beforeCreate() {
+        mainList.setShopItems();
+        dayFour();
+    },
+})

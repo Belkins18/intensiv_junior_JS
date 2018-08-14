@@ -1,11 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <script src="script.js"></script>
+    <script src="../lib/vue.min.js"></script>
 </head>
-<body>
 
+<body>
+    <div id='render_price' class='render'>
+        <p>{{ pricelist }}</p>
+        <ul class='render__list'>
+
+            <li class='render__item' v-for="(item, index) in object.shopItems">
+                {{index + 1}} - {{ item }}
+            </li>
+        </ul>
+
+        <p>{{ shoplist }}</p>
+        <ul class='render__list'>
+            <li class='render__item' v-for="(value, key, index) in object">
+                {{index + 1}} - {{ key }}
+            </li>
+        </ul>
+    </div>
 </body>
+
+<script src="script.js"></script>
+
 </html>
