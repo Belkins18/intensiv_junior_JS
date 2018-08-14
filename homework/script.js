@@ -45,6 +45,12 @@ let budget,
     budgetForDay,
     price;
 
+let categoryList = [
+    'Apple',
+    'Samsung',
+    'Xiaomi',
+];
+
 let mainList = {
     init: function () {
         this.setBudget();
@@ -66,6 +72,62 @@ let mainList = {
     price: price,
     shopItems: [],
     date: date,
+    defautProps: {
+        shopGoods: {
+            use: true,
+            data: categoryList
+        },
+        shopItems: {
+            use: true,
+            data: [
+                {
+                    category: 'Apple',
+                    item: 'iPhone X',
+                    price: 36499
+                },
+                {
+                    category: 'Apple',
+                    item: 'iPhone 8',
+                    price: 21999
+                },
+                {
+                    category: 'Apple',
+                    item: 'iPhone 7',
+                    price: 15999
+                },
+                {
+                    category: 'Samsung',
+                    item: 'Galaxy J6',
+                    price: 5999
+                },
+                {
+                    category: 'Samsung',
+                    item: 'Galaxy A6+',
+                    price: 9999
+                },
+                {
+                    category: 'Samsung',
+                    item: 'Galaxy A8',
+                    price: 17999
+                },
+                {
+                    category: 'Xiaomi',
+                    item: 'Redmi S2',
+                    price: 4799
+                },
+                {
+                    category: 'Xiaomi',
+                    item: 'Redmi Note 5',
+                    price: 5999
+                },
+                {
+                    category: 'Xiaomi',
+                    item: 'Redmi 5',
+                    price: 3899
+                },
+            ]
+        }
+    },
 
     setBudget: function (str = 'Ваш бюджет на месяц?', defaultValue = 45000) {
         let budgetPrompt = parseFloat(prompt(str, defaultValue));
@@ -112,19 +174,24 @@ let mainList = {
     },
 
     setShopGoods: function (str = 'Какой тип товаров будем продавать?', count = 3) {
-        let res = this.shopGoods;
-        let i = res.length;
+        if (!this.defautProps.shopGoods.use) {
+            let res = this.shopGoods;
+            let i = res.length;
 
-        while (i < count) {
-            let question = prompt(str);
+            while (i < count) {
+                let question = prompt(str);
 
-            if (question !== null && question != '' && (question.replace(/\s/g, '') != '')) {
-                res.push(question);
-                i++;
+                if (question !== null && question != '' && (question.replace(/\s/g, '') != '')) {
+                    res.push(question);
+                    i++;
+                }
             }
+            this.shopGoods = res;
+            return this.shopGoods.sort();
+        } else {
+            this.shopGoods = this.defautProps.shopGoods.data
+            return this.shopGoods;
         }
-        this.shopGoods = res;
-        return this.shopGoods.sort();
     },
 
     setEmployers: function (str = 'Введите имя сотрудника: ', count = 4) {
@@ -179,32 +246,46 @@ let mainList = {
     },
 
     setShopItems: function (str = 'Товары через запятую', str2 = 'Погодите, добавьте еще') {
-        let items = prompt(str, '');
-        if (items != '' && items !== null) {
-            this.shopItems = items.split(',');
-            let addAnother = prompt(str2, '');
-            if (addAnother != '' && addAnother !== null) {
-                this.shopItems.push(addAnother);
-            } else { return addAnother}
-            this.shopItems.sort();
+        if (!this.defautProps.shopItems.use) {
+            let items = prompt(str, '');
+            if (items != '' && items !== null) {
+                this.shopItems = items.split(',');
+                let addAnother = prompt(str2, '');
+                if (addAnother != '' && addAnother !== null) {
+                    this.shopItems.push(addAnother);
+                } else { return addAnother}
+                this.shopItems.sort();
+            } else {
+                this.setShopItems();
+            }
         } else {
-            this.setShopItems();
+            this.shopItems = this.defautProps.shopItems.data
+            return this.shopItems;
         }
-        
     },
 };
 
 
 let dayFour = (obj = mainList) => {
     let arr1 = obj.shopItems;
-    let str1 = 'У нас вы можете купить:';
-    let str2 = 'Наш магазин включает в себя:';
+    let str1 = 'Список товаров:';
+    let str2 = 'Методы и свойства магазина:';
 
     let consoleFunction_1 = (str, arr) => {
-        console.log(str);
-        arr.forEach(function (item, i) {
-            console.log(`${(i + 1)}: ${item}`);
-        });
+        if (!mainList.defautProps.shopItems.use) {
+            console.log(str);
+            arr.forEach(function (item, i = 0) {
+                console.log(`${(++i)}: ${item}`);
+            });
+        } else {
+            console.log(str);
+            arr.forEach(function (item, i = 0) {
+                console.log(`${(++i)}:`);
+                for (const key in item) {
+                    console.log(`${key}:${item[key]}`);
+                }
+            });
+        }
     };
 
     let consoleFunction_2 = (str = str2) => {
@@ -215,20 +296,22 @@ let dayFour = (obj = mainList) => {
         }
     };
 
-    consoleFunction_1(str1, arr1);
     consoleFunction_2();
+    consoleFunction_1(str1, arr1);
 };
 
 
 let render_price = new Vue({
     el: '#render_price',
     data: {
-        pricelist: 'У нас вы можете купить:',
-        shoplist: 'Наш магазин включает в себя:',
+        pricelist: 'Список товаров:',
+        brandlist: 'Список брендов:',
+        shoplist: 'Методы и свойства магазина:',
         object: mainList,
         isVisible: false,
-        buttonName: ['Start Render', 'Rerender']
-        
+        buttonName: ['Start Render', 'Rerender'],
+        checkedNames: [],
+        answer: ''
     },
     methods: {
         startRender: function(evt) {
@@ -240,9 +323,13 @@ let render_price = new Vue({
             return this.isVisible = false;
         },
         initData: function() {
+            mainList.setShopGoods();
             mainList.setShopItems();
             dayFour();
         },
+        changecategoryList: function(evt) {
+            this.object.shopGoods = this.checkedNames;
+        }
     },
     computed: {
         button: function () {

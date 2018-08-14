@@ -55,7 +55,10 @@ table {
 .hiddenClass {
     display: none;
 }
-
+.render {
+    padding-left: 10px;
+    padding-right: 10px;
+}
 
 
 * + button {

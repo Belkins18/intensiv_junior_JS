@@ -13,18 +13,39 @@
         <div id='render_price' class='render'>
 
             <div v-bind:class="[isVisible ? 'visibleClass' : 'hiddenClass']">
-                <p>{{ pricelist }}</p>
-                <ul class='render__list'>
-
-                    <li class='render__item' v-for="(item, index) in object.shopItems">
-                        {{index + 1}} - {{ item }}
-                    </li>
-                </ul>
-
                 <p>{{ shoplist }}</p>
                 <ul class='render__list'>
                     <li class='render__item' v-for="(value, key, index) in object">
                         {{index + 1}} - {{ key }}
+                    </li>
+                </ul>
+                
+                <p>{{ brandlist }}</p>
+                <ul class='categoryList'>
+                    <template v-for="item in object.defautProps.shopGoods.data">
+                        <li class='categoryList__item'>
+                            <input 
+                                type="checkbox" 
+                                :id="item" 
+                                :value="item" 
+                                v-model="checkedNames"
+                                v-on:change="changecategoryList">
+                            <label :for="item">{{ item }}</label>
+                        </li>
+                    </template> 
+                </ul>
+                <br>
+                <span>Отмеченные тип товаров: {{ checkedNames }}</span>
+                
+                <p>{{ pricelist }}</p>
+                <ul class='render__list'>
+
+                    <li class='render__item' v-for="(item, index) in object.shopItems">
+                        <p>{{index + 1}} - { 
+                            <span>{{ item.category }} </span>
+                            <span>{{ item.item }} </span>
+                            <span>{{ item.price }} } </span>
+                        </p>
                     </li>
                 </ul>
             </div>
