@@ -47,3 +47,6 @@ let employers = document.querySelectorAll('.hire-employers-item');
 for (let i = 0; i < employers.length; i++) {
     console.log(employers[i]);
 }
+
+
+
