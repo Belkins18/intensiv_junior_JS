@@ -336,4 +336,4 @@ let render_price = new Vue({
             return (this.isVisible !== true) ? this.buttonName[0] : this.buttonName[1];
         }
     }
-})
+});
