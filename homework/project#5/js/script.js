@@ -45,6 +45,7 @@ let setInputDefaultValue = function (arr, arrStr) {
             item.value = arrStr[index];
             item.addEventListener('change', function () {
                console.log(this.value);
+               console.log(index);
             });
         });
     }
@@ -397,7 +398,12 @@ elementsDom.openShop.addEventListener('click', (e, obj = mainList)=>{
 
 elementsDom.goodsItemBtn.addEventListener('click', (e, obj = mainList)=>{
     e.preventDefault();
-    getDomNode(step2arr, 'goods-value').textContent = obj.shopGoods.toString();
+    if (getDomNode(step2arr, 'goods-value').textContent != '') {
+        getDomNode(step2arr, 'goods-value').textContent = obj.shopGoods.toString();
+        e.target.setAttribute('disabled', 'disabled');
+    } else {
+        return;
+    }
 });
 
 elementsDom.countBudgetBtn.addEventListener('click', (e)=>{
