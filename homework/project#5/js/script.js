@@ -1,82 +1,3 @@
-const arrayList = ['name', 'budget', 'goods', 'items', 'employers', 'discount', 'isopen'];
-const arrayList5 = ['choose-item', 'time-value', 'count-budget-value'];
-// step 1
-console.log('--- step 1 ---');
-let open = document.getElementById('open-btn');
-console.log(open);
-
-// step 2
-console.log('--- step 2 ---');
-const step2arr = arrayList.map(function(item, index = 0) {
-    let res = [];
-    let resItem = {};
-    // if (item !== 'discount' && item !== 'isopen') {
-        console.log(document.querySelector(`.${item}-value`));
-        resItem.className = `${item}-value`;
-        resItem.selector = document.querySelector(`.${item}-value`);
-        res.push(resItem);
-        return res;
-    // }
-});
-console.log(step2arr);
-let getDomNode = function (arr, str) {
-    let selector;
-    console.log(arr);
-    arr.forEach((el)=>{
-        let obj = el[0];
-        if (obj.className === str) {
-            return selector = obj.selector;
-        }
-    });
-    console.log(selector);
-    return selector;
-};
-
-
-// step 3
-console.log('--- step 3 ---');
-let step3arr = document.querySelectorAll('.goods-item');
-// step3arr.forEach((item) => {
-//     console.log(item);
-// });
-let setInputDefaultValue = function (arr, arrStr) {
-    if (arr.length <= arrStr.length) {
-        arr.forEach((item, index) => {
-            item.value = arrStr[index];
-            item.addEventListener('change', function () {
-               console.log(this.value);
-               console.log(index);
-            });
-        });
-    }
-};
-
-// step 4
-console.log('--- step 4 ---');
-let form = document.querySelector('.main-functions');
-let elements = form.getElementsByTagName('button');
-let getButtonDomNode = function (arr, className) {
-    for (let i = 0; i < arr.length; i++) {
-        if (arr[i].className === className) {
-            let buttons = elements[i];
-            return buttons;
-        }
-    }
-};
-
-
-// step 5
-console.log('--- step 5 ---');
-arrayList5.forEach((el)=>{
-    console.log(document.querySelector(`.${el}`));
-});
-// step 6
-console.log('--- step 6 ---');
-let employers = document.querySelectorAll('.hire-employers-item');
-for (let i = 0; i < employers.length; i++) {
-    console.log(employers[i]);
-}
-//================================================================
 Date.prototype.getNumberOfDaysInMonth = function (monthOffset) {
     if (monthOffset !== undefined) {
         return new Date(this.getFullYear(), this.getMonth() + monthOffset, 0).getDate();
@@ -292,7 +213,9 @@ let mainList = {
         this.employers = res;
         return this.employers.sort();
     },
-
+    getTime: function (){
+        return this.date.getHoursInDay();
+    },
     getWorkTime: function (time = this.date.getHoursInDay()) {
         // let time = date.getHoursInDay();
         if (time < 0) {
@@ -379,6 +302,117 @@ let dayFour = (obj = mainList) => {
     consoleFunction_2();
     consoleFunction_1(str1, arr1);
 };
+//================================================================
+
+const arrayList = ['name', 'budget', 'goods', 'items', 'employers', 'discount', 'isopen'];
+const arrayList5 = ['choose-item', 'time-value', 'count-budget-value'];
+// step 1
+console.log('--- step 1 ---');
+let open = document.getElementById('open-btn');
+// console.log(open);
+
+// step 2
+console.log('--- step 2 ---');
+const step2arr = arrayList.map(function(item, index = 0) {
+    let res = [];
+    let resItem = {};
+    // if (item !== 'discount' && item !== 'isopen') {
+        console.log(document.querySelector(`.${item}-value`));
+        resItem.className = `${item}-value`;
+        resItem.selector = document.querySelector(`.${item}-value`);
+        res.push(resItem);
+        return res;
+    // }
+});
+// console.log(step2arr);
+let getDomNode = function (arr, str) {
+    let selector;
+    arr.forEach((el)=>{
+        let obj = el[0];
+        if (obj.className === str) {
+            return selector = obj.selector;
+        }
+    });
+    return selector;
+};
+
+
+// step 3
+console.log('--- step 3 ---');
+let step3arr = document.querySelectorAll('.goods-item');
+// step3arr.forEach((item) => {
+//     console.log(item);
+// });
+let setInputDefaultValue = function (arr, arrStr) {
+    if (arr.length <= arrStr.length) {
+        arr.forEach((item, index) => {
+            item.value = arrStr[index];
+            console.log(item);
+        });
+    }
+};
+
+let getInputNodeList = function (selector) {
+    let elements;
+    if (document.getElementById(selector)) {
+        elements = document.getElementById(selector);
+    } else if (document.querySelectorAll(selector)) {
+        elements = document.querySelectorAll(selector);
+    } else if (document.querySelector(selector)) {
+        elements = document.querySelector(selector);
+    }
+    return elements;
+}
+
+let inputChange = function (arr, obj = mainList) {
+    let classObj = {
+        className: 'goods-item',
+        array: obj.shopGoods
+    }
+    arr.forEach((item, index) => {
+        item.addEventListener('change', function () {
+            if (this.classList.contains(classObj.className)) {
+                if (this.value !== '') {
+                    classObj.array[index] = this.value;
+                } else {
+                    delete classObj.array[index];
+                }
+            }
+            console.log(this.value);
+            console.log(index);
+            console.log(classObj.array[index]);
+        });
+    });
+}
+
+//  inputChange('.hire-employers-item');
+
+// step 4
+console.log('--- step 4 ---');
+let form = document.querySelector('.main-functions');
+let elements = form.getElementsByTagName('button');
+let getButtonDomNode = function (arr, className) {
+    for (let i = 0; i < arr.length; i++) {
+        if (arr[i].classList.contains(className)) {
+            let buttons = elements[i];
+            return buttons;
+        }
+    }
+};
+
+
+// step 5
+console.log('--- step 5 ---');
+arrayList5.forEach((el)=>{
+    // console.log(document.querySelector(`.${el}`));
+});
+// step 6
+console.log('--- step 6 ---');
+let employers = document.querySelectorAll('.hire-employers-item');
+for (let i = 0; i < employers.length; i++) {
+    // console.log(employers[i]);
+}
+
 //==============================
 // EventListeners
 
@@ -386,26 +420,92 @@ let elementsDom = {
     openShop: open,
     goodsItemBtn: getButtonDomNode(elements, 'goods-item-btn'),
     countBudgetBtn: getButtonDomNode(elements, 'count-budget-btn'),
+    
+    chooseItemField: document.querySelector('.choose-item'),
+    countBudgetField: document.querySelector('.count-budget-value'),
+    timeValueField: document.querySelector('.time-value'),
+    itemsValueField: getDomNode(step2arr, 'items-value'),
+    isopenValueField: getDomNode(step2arr, 'isopen-value'),
+    discountValueField: getDomNode(step2arr, 'discount-value'),
 };
 
-elementsDom.openShop.addEventListener('click', (e, obj = mainList)=>{
+let clickOpenStatus = false;
+
+getStatus();
+elementsDom.openShop.addEventListener('click', (e, obj = mainList) =>{
     e.preventDefault();
     getDomNode(step2arr, 'name-value').textContent = obj.setShopName();
     getDomNode(step2arr, 'budget-value').textContent = obj.setBudget();
     setInputDefaultValue(step3arr, obj.setShopGoods());
-    e.target.setAttribute('disabled', 'disabled');
+    let icon = {
+        isopen: {
+            true: elementsDom.isopenValueField.querySelector('.material-icons.material-icons__true'),
+            false: elementsDom.isopenValueField.querySelector('.material-icons.material-icons__false')
+        },
+        discount: {
+            true: elementsDom.discountValueField.querySelector('.material-icons.material-icons__true'),
+            false: elementsDom.discountValueField.querySelector('.material-icons.material-icons__false')
+        }
+    };
+    (!obj.getWorkTime()) ? (
+        icon.isopen.true.classList.add('d-none'),
+        icon.isopen.false.classList.remove('d-none')
+    ) : (
+        icon.isopen.true.classList.remove('d-none'),
+        icon.isopen.false.classList.add('d-none')
+    );
+    (!obj.discount) ? (
+        icon.discount.true.classList.add('d-none'),
+        icon.discount.false.classList.remove('d-none')
+    ) : (
+        icon.discount.true.classList.remove('d-none'),
+        icon.discount.false.classList.add('d-none')
+    );
+    e.target.parentNode.setAttribute('disabled', 'disabled');
+
+    console.log();
+    clickOpenStatus = true;
+    getStatus();
+    return clickOpenStatus;
 });
 
-elementsDom.goodsItemBtn.addEventListener('click', (e, obj = mainList)=>{
-    e.preventDefault();
-    if (getDomNode(step2arr, 'goods-value').textContent != '') {
-        getDomNode(step2arr, 'goods-value').textContent = obj.shopGoods.toString();
-        e.target.setAttribute('disabled', 'disabled');
+function getStatus() {
+    if(!clickOpenStatus) {
+        elementsDom.goodsItemBtn.classList.add('disabled');
+        elementsDom.countBudgetBtn.classList.add('disabled');
+        elementsDom.countBudgetField.setAttribute('readonly', true);
+        elementsDom.timeValueField.setAttribute('readonly', true);
+
+        getInputNodeList('.goods-item').forEach((item, index) => {
+            item.setAttribute('readonly', true);
+        });
+        elementsDom.chooseItemField.setAttribute('readonly', true);
     } else {
-        return;
+    
+        elementsDom.goodsItemBtn.classList.remove('disabled');
+        elementsDom.countBudgetBtn.classList.remove('disabled');
+
+        getInputNodeList('.goods-item').forEach((item, index) => {
+            item.removeAttribute('readonly');
+        });
+        elementsDom.chooseItemField.removeAttribute('readonly');
+        elementsDom.chooseItemField.addEventListener('blur', (e) => {
+            elementsDom.itemsValueField.innerHTML = JSON.stringify(mainList.setShopItems(), null, 4);
+            elementsDom.chooseItemField.setAttribute('readonly', true);
+        });
+        
+        inputChange(getInputNodeList('.goods-item'));
+        elementsDom.goodsItemBtn.addEventListener('click', (e, obj = mainList) => {
+            e.preventDefault();
+            getDomNode(step2arr, 'goods-value').textContent = obj.shopGoods.toString();
+            inputChange(getInputNodeList('.goods-item'));
+        });
+    
+        elementsDom.countBudgetBtn.addEventListener('click', (e, obj = mainList)=>{
+            e.preventDefault();
+            elementsDom.countBudgetField.value = obj.getPriceCalc();
+        });
+
+        elementsDom.timeValueField.value = mainList.getTime();
     }
-});
-
-elementsDom.countBudgetBtn.addEventListener('click', (e)=>{
-
-});
+};
