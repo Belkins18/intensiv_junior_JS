@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Java Script</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+	    crossorigin="anonymous">
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet">
+</head>
+
+<body>
+	<nav class="navbar navbar-expand-lg navbar-light bg-light">
+		<a class="navbar-brand" href="#">Shop Academy</a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+		    aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+
+		<div class="collapse navbar-collapse" id="navbarSupportedContent">
+			<div></div>
+			<div class="my-2 my-lg-0">
+				<button type="button" id='open-btn' class="button continue_shopping_button">
+					<div>Open shop</div>
+				</button>
+			</div>
+		</div>
+	</nav>
+
+	<main class='main container-fluid'>
+		<div class='row'>
+			<div class='col-md-6 col-12'>
+				<div class="main-info">
+					<ul class="list-group">
+						<li class="list-group-item">
+							<div class="name">Название магазина: </div>
+							<div class="name-value"></div>
+						</li>
+						<li class="list-group-item">
+							<div class="budget">Бюджет магазина: </div>
+							<div class="budget-value"></div>
+						</li>
+						<li class="list-group-item">
+							<div class="goods">Категории товаров: </div>
+							<div class="goods-value"></div>
+						</li>
+						<li class="list-group-item">
+							<div class="items">Наименования товаров: </div>
+							<div class="items-value"></div>
+						</li>
+						<li class="list-group-item">
+							<div class="employers">Сотрудники: </div>
+							<div class="employers-value"></div>
+						</li>
+						<li class="list-group-item list-group-item__discount">
+							<div class="discount">Дисконтная система </div>
+							<div class="discount-value">
+								<i class="material-icons material-icons__true">
+									featured_play_list
+								</i>
+								<i class="material-icons material-icons__false">
+									featured_play_list
+								</i>
+							</div>
+						</li>
+						<li class="list-group-item list-group-item__isopen">
+							<div class="isopen">Открыто </div>
+							<div class="isopen-value">
+								<i class="material-icons material-icons__true">
+									lock_open
+								</i>
+								<i class="material-icons material-icons__false">
+									lock
+								</i>
+							</div>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<div class='col-md-6 col-12'>
+				<div class="main-functions">
+					<ul class="list-group">
+						<li class="list-group-item">
+							<div class="choose-goods">Введите категории товаров</div>
+						</li>
+						<li class="list-group-item">
+							<input class="goods-item form-control" type="text" id="goods_1">
+							<input class="goods-item form-control" type="text" id="goods_2">
+							<input class="goods-item form-control" type="text" id="goods_3">
+							<input class="goods-item form-control" type="text" id="goods_4">
+						</li>
+						<li class="list-group-item">
+							<button class="goods-item-btn btn btn-light">Утвердить</button>
+						</li>
+					</ul>
+
+					<ul class="list-group">
+						<li class="list-group-item">
+							<div class="choose-items">Введите продукты через запятую</div>
+						</li>
+						<li class="list-group-item">
+							<input class="choose-item form-control" type="text" id="items">
+						</li>
+					</ul>
+
+					<ul class="list-group">
+						<li class="list-group-item">
+							<div class="time">Сколько сейчас времени?</div>
+						</li>
+						<li class="list-group-item">
+							<input class="time-value form-control" type="text" id="time">
+						</li>
+					</ul>
+
+					<ul class="list-group">
+						<li class="list-group-item">
+							<div class="count-budget">Расчет дневного бюджета</div>
+						</li>
+						<li class="list-group-item">
+							<input class="count-budget-value form-control" type="text" id="budget">
+						</li>
+						<li class="list-group-item">
+							<button class="count-budget-btn btn btn-light">Рассчитать</button>
+						</li>
+					</ul>
+
+
+					<ul class="list-group">
+						<li class="list-group-item">
+							<div class="hire-employers">Имена сотрудников</div>
+						</li>
+						<li class="list-group-item">
+							<input class="hire-employers-item form-control" type="text" id="employers_1">
+							<input class="hire-employers-item form-control" type="text" id="employers_2">
+							<input class="hire-employers-item form-control" type="text" id="employers_3">
+						</li>
+						<li class="list-group-item">
+							<button class="hire-employers-btn btn btn-light">Нанять</button>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</main>
+
+	<link rel="stylesheet" href="css/style.css">
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+	    crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+	    crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+	    crossorigin="anonymous"></script>
+	<script src="js/script.js"></script>
+</body>
+
+</html>
