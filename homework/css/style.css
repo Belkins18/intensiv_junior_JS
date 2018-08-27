@@ -4,7 +4,7 @@
   -webkit-animation-name: fade;
   -webkit-animation-duration: 2.5s;
 }
-@-webkit-keyframes fade {
+@keyframes fade {
   from {
     opacity: 0.1;
   }
@@ -12,12 +12,16 @@
     opacity: 1;
   }
 }
-@keyframes fade {
+.fadeOut {
+  animation-name: fadeOut;
+  animation-duration: 1.5s;
+}
+@keyframes fadeOut {
   from {
-    opacity: 0.1;
+    opacity: 1;
   }
   to {
-    opacity: 1;
+    opacity: 0;
   }
 }
 * {

@@ -37,24 +37,46 @@ let eventListeners = {
             }
         });
     },
-    modal() {
-        let modal = {
-            btn: document.querySelector('.more'),
-            popup: document.querySelector('.popup'),
-        };
-        
-        window.addEventListener('click', (evt, obj = modal) => {
+    descriptionBtn() {
+        let info = document.querySelector('.info');
+        let btns = document.getElementsByClassName('description-btn');
+        info.addEventListener('click', (evt) => {
             let _target = evt.target;
-            let modalBtn = _target.closest(`.${getClassName(obj.btn)}`);
-            let popup = obj.popup;
-            let overlay = popup.closest('.overlay');
-            let popupClose = popup.childNodes[1];
+            let descBtn = _target.closest('.description-btn');
+            if (!descBtn) {
+                return;
+            } else {
+                console.log(descBtn.closest('.info-tabcontent') );
+            }
+        });
+    },
+    modal() {
+        let btn = document.querySelector('.more'),
+            popup = document.querySelector('.popup'),
+            popupClose = popup.querySelector('.popup-close'),
+            overlay = popup.closest('.overlay'),
+            body = document.body;
+        
+        btn.addEventListener('click', (evt) => {
+            let _target = evt.target;
+            let modalBtn = _target.closest(`.${getClassName(btn)}`);
             if (!modalBtn) {
                 return;
             } else {
                 overlay.classList.add('is-open');
+                body.style.overflow = 'hidden';
             }
-            
+        });
+        popupClose.addEventListener('click', (evt) => {
+            let _target = evt.target;
+            console.log(_target);
+            if (!_target.closest(`.${getClassName(popupClose)}`)) {
+                return;
+            } else {
+                overlay.classList.remove('is-open');
+                overlay.classList.remove('fadeOut');
+                body.style.overflow = 'inherit';
+            }
         })
     }
 }
@@ -111,6 +133,7 @@ let timesParam = {
 
 document.addEventListener("DOMContentLoaded", function(){
     eventListeners.tabs();
+    eventListeners.descriptionBtn();
     eventListeners.modal();
     let t = setInterval(function(obj = timesParam) {
         let res = {
