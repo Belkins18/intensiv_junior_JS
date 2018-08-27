@@ -1,3 +1,8 @@
+'use strict';
+function getClassName(el) {
+    return el.className;
+}
+
 let eventListeners = {
     tabs() {
         let info = document.getElementsByClassName('info-header')[0],
@@ -31,10 +36,34 @@ let eventListeners = {
                 }
             }
         });
+    },
+    modal() {
+        let modal = {
+            btn: document.querySelector('.more'),
+            popup: document.querySelector('.popup'),
+        };
+        
+        window.addEventListener('click', (evt, obj = modal) => {
+            let _target = evt.target;
+            let modalBtn = _target.closest(`.${getClassName(obj.btn)}`);
+            let popup = obj.popup;
+            let overlay = popup.closest('.overlay');
+            let popupClose = popup.childNodes[1];
+            if (!modalBtn) {
+                return;
+            } else {
+                overlay.classList.add('is-open');
+            }
+            
+        })
     }
 }
+
+
+
+
 let timesParam = {
-    downDate: "Aug 24, 2018 12:52:10",
+    downDate: "Aug 30, 2018 00:00:00",
     domElements: {
         hours: document.querySelector('#timer .hours'),
         minutes: document.querySelector('#timer .minutes'),
@@ -80,19 +109,30 @@ let timesParam = {
     }
 }
 
-
-window.addEventListener("DOMContentLoaded", function() {
-    eventListeners.tabs();
-});
-
 document.addEventListener("DOMContentLoaded", function(){
+    eventListeners.tabs();
+    eventListeners.modal();
     let t = setInterval(function(obj = timesParam) {
         let res = {
             different() {
                 return obj.getDifferent();
             },
+            correct(func) {
+                return (func < 10) ? `0${func}` : func;
+            },
+            days() {
+                return obj.days();
+            },
             hours() {
-                return (obj.hours() < 10) ? `0${obj.hours()}` : obj.hours();
+                if (this.days() > 0) {
+                    return this.days() * 24 + parseInt(obj.hours(), 10);
+                } else {
+                    if (obj.hours() < 10) {
+                        return `0${obj.hours()}`
+                    } else {
+                        return obj.hours();
+                    }
+                }
             },
             minutes() {
                 return (obj.minutes() < 10) ? `0${obj.minutes()}` : obj.minutes();
@@ -101,6 +141,7 @@ document.addEventListener("DOMContentLoaded", function(){
                 return (obj.seconds() < 10) ? `0${obj.seconds()}` : obj.seconds();
             }
         }
+
         obj.domElements.hours.textContent = `${res.hours()}`;
         obj.domElements.minutes.textContent = `${res.minutes()}`;
         obj.domElements.seconds.textContent = `${res.seconds()}`;
