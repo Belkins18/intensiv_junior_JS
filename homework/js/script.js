@@ -56,7 +56,7 @@ let eventListeners = {
             popupClose = popup.querySelector('.popup-close'),
             overlay = popup.closest('.overlay'),
             body = document.body;
-        
+
         btn.addEventListener('click', (evt) => {
             let _target = evt.target;
             let modalBtn = _target.closest(`.${getClassName(btn)}`);
@@ -68,6 +68,7 @@ let eventListeners = {
             }
         });
         popupClose.addEventListener('click', (evt) => {
+            evt.preventDefault();
             let _target = evt.target;
             console.log(_target);
             if (!_target.closest(`.${getClassName(popupClose)}`)) {
@@ -79,13 +80,10 @@ let eventListeners = {
             }
         })
     }
-}
-
-
-
+};
 
 let timesParam = {
-    downDate: "Aug 30, 2018 00:00:00",
+    downDate: "Sep 03, 2018 21:00:00",
     domElements: {
         hours: document.querySelector('#timer .hours'),
         minutes: document.querySelector('#timer .minutes'),
@@ -129,13 +127,9 @@ let timesParam = {
     getSeconds(ms) {
         return Math.floor((ms % (1000 * 60)) / 1000);
     }
-}
-
-document.addEventListener("DOMContentLoaded", function(){
-    eventListeners.tabs();
-    eventListeners.descriptionBtn();
-    eventListeners.modal();
-    let t = setInterval(function(obj = timesParam) {
+};
+let timer = function(obj) {
+    setInterval(function() {
         let res = {
             different() {
                 return obj.getDifferent();
@@ -163,20 +157,31 @@ document.addEventListener("DOMContentLoaded", function(){
             seconds() {
                 return (obj.seconds() < 10) ? `0${obj.seconds()}` : obj.seconds();
             }
-        }
+        };
 
         obj.domElements.hours.textContent = `${res.hours()}`;
         obj.domElements.minutes.textContent = `${res.minutes()}`;
         obj.domElements.seconds.textContent = `${res.seconds()}`;
-        
+
         if (res.different() < 0) {
-            clearInterval(t),
+            clearInterval(t);
             obj.domElements.hours.textContent = `00`;
             obj.domElements.minutes.textContent = `00`;
             obj.domElements.seconds.textContent = `00`;
             obj.domElements.timerAction.textContent = `EXPIRED`;
         }
     }, 1000);
+};
+
+
+
+
+document.addEventListener("DOMContentLoaded", function(){
+    eventListeners.tabs();
+    eventListeners.descriptionBtn();
+    eventListeners.modal();
+
+    timer(timesParam);
 });
 
 document.addEventListener("DOMContentLoaded", function(){
@@ -188,35 +193,105 @@ document.addEventListener("DOMContentLoaded", function(){
 
     let form = document.getElementsByClassName('main-form')[0],
         input = form.getElementsByTagName('input'),
+        form2 = document.getElementById('form'),
+        input2 = form2.getElementsByTagName('input'),
         statusMessage = document.createElement('div');
     statusMessage.classList.add('status');
 
     form.addEventListener('submit', function (event) {
         event.preventDefault();
         form.appendChild(statusMessage);
-
-        //AJAX
-        let request = new XMLHttpRequest();
-        request.open('POST', 'server.php')
-        request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-
         let formData = new FormData(form);
-        request.send(formData);
 
-        request.onreadystatechange = function () {
-            if (request.readyState < 4) {
-                statusMessage.innerHTML = massage.loading;
-            } else if (request.readyState === 4) {
-                if (request.status == 200 && request.status < 300) {
-                    statusMessage.innerHTML = massage.success;
-                }
-                else {
-                    statusMessage.innerHTML = massage.failure;
-                }
+        function postData(data) {
+            return new Promise(function(resolve, reject) {
+                //AJAX
+                let request = new XMLHttpRequest();
+                request.open('POST', 'server.php');
+                request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+                request.onreadystatechange = function () {
+                    if (request.readyState < 4) {
+                        resolve();
+                    } else if (request.readyState === 4) {
+                        if (request.status == 200 && request.status < 300) {
+                            resolve();
+                        }
+                        else {
+                            reject();
+                        }
+                    }
+                };
+
+                request.send(formData);
+            });
+
+        }
+        function clearInput() {
+            for (let i = 0; i < input.length; i++) {
+                input[i].value = '';
             }
         }
-        for (let i = 0; i < input.length; i++) {
-            input[i].value = '';
-        }
+        postData(formData)
+            .then(() => statusMessage.innerHTML = massage.loading)
+            .then(() => {
+                statusMessage.innerHTML = massage.success;
+                setInterval(()=> {
+                    // eventListeners.modal().popupClose
+                    // //                     // modalSelectors.popupClose.click();
+                    // modalSelectors.popupClose.removeEventListener('click', x);
+                }, 3000);
+            })
+            .catch(()=> statusMessage.innerHTML = massage.failure)
+            .then(clearInput);
+
+    });
+
+    form2.addEventListener('submit', function (event) {
+        event.preventDefault();
+        form2.appendChild(statusMessage);
+        let statusField = this.querySelector('.status');
+        let formData = new FormData(form2);
+        let postData = function(data) {
+            return new Promise(function (resolve, reject) {
+                //AJAX
+                let request = new XMLHttpRequest();
+                request.open('POST', 'server.php');
+                request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                request.onreadystatechange = function () {
+                    if (request.readyState < 4) {
+                        resolve();
+                    } else if (request.readyState === 4) {
+                        if (request.status == 200 && request.status < 300) {
+                            resolve();
+                        }
+                        else {
+                            reject();
+                        }
+                    }
+                };
+                request.send(formData);
+            });
+        };
+
+        let clearInput = function () {
+            for (let i = 0; i < input2.length; i++) {
+                input2[i].value = '';
+            }
+        };
+        let hideStatus = function() {
+            statusField.style.display = 'none';
+        };
+
+        postData(formData)
+            .then(()=> statusMessage.innerHTML = massage.loading)
+            .then(()=> {
+                statusMessage.innerHTML = massage.success;
+                setTimeout(()=>{
+                    hideStatus();
+                }, 3000)
+            })
+            .catch(()=> statusMessage.innerHTML = massage.failure)
+            .then(clearInput);
     })
 });
