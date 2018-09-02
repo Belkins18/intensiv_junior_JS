@@ -1,4 +1,26 @@
 'use strict';
+// only run when the substr() function is broken
+if ('ab'.substr(-1) != 'b') {
+    /**
+     *  Get the substring of a string
+     *  @param  {integer}  start   where to start the substring
+     *  @param  {integer}  length  how many characters to return
+     *  @return {string}
+     */
+    String.prototype.substr = function(substr) {
+        return function(start, length) {
+            // call the original method
+            return substr.call(this,
+                // did we get a negative start, calculate how much it is from the beginning of the string
+                // adjust the start parameter for negative value
+                start < 0 ? this.length + start : start,
+                length)
+        }
+    }(String.prototype.substr);
+}
+
+
+
 function getClassName(el) {
     return el.className;
 }
@@ -294,4 +316,123 @@ document.addEventListener("DOMContentLoaded", function(){
             .catch(()=> statusMessage.innerHTML = massage.failure)
             .then(clearInput);
     })
+
+
+    // Slider
+    let slideIndex = 1,
+        slides = document.getElementsByClassName('slider-item'),
+        prev = document.querySelector('.prev'),
+        next = document.querySelector('.next'),
+        dotWrap = document.querySelector('.slider-dots'),
+        dots = document.getElementsByClassName('dot');
+
+    showSlides(slideIndex);
+
+    function showSlides(n) {
+        if (n > slides.length) {
+            slideIndex = 1;
+        }
+        if (n < 1) {
+            slideIndex = slides.length;
+        }
+
+        for (let i = 0; i < slides.length; i++) {
+            slides[i].style.display = 'none';
+        }
+        for (let i = 0; i < dots.length; i++) {
+            dots[i].classList.remove('dot-active');
+        }
+
+        slides[slideIndex - 1].style.display = 'block';
+        dots[slideIndex - 1].classList.add('dot-active');
+    }
+
+    function plusSlides(n) {
+        showSlides(slideIndex += n)
+    }
+
+    function currentSlide(n) {
+        showSlides(slideIndex = n)
+    }
+
+    prev.addEventListener('click', function () {
+        plusSlides(-1);
+    });
+
+    next.addEventListener('click', function () {
+        plusSlides(1);
+    });
+
+    dotWrap.addEventListener('click', function (event) {
+        for (let i = 0; i < dots.length + 1; i++) {
+            if (event.target.classList.contains('dot') && event.target == dots[i - 1]) {
+                currentSlide(i);
+            }
+        }
+    });
+
+
+    // Calculator
+    let persons = document.getElementsByClassName('counter-block-input')[0],
+        resDays = document.getElementsByClassName('counter-block-input')[1],
+        place = document.getElementById('select'),
+        totalValue = document.getElementById('total'),
+        personsSum = 0,
+        daysSum = 0,
+        total = 0,
+        pattern = /[^\d]/g;
+
+    totalValue.innerHTML = 0;
+    function checkNumber(input) {
+        input.value = input.value.replace(pattern, '').substr(0, 2);
+        console.log(input.value);
+    }
+    persons.addEventListener('keyup', function () {
+        checkNumber(this);
+    });
+    resDays.addEventListener('keyup', function () {
+        checkNumber(this);
+    });
+    persons.addEventListener('change', function () {
+        personsSum = +this.value;
+        console.log(typeof(personsSum));
+        console.log(Number.isInteger(personsSum));
+        if (Number.isInteger(personsSum) && personsSum > 0) {
+            total = (daysSum + personsSum) * 4000;
+            console.log(total)
+            if (resDays.value == '') {
+                totalValue.innerHTML = 0;
+            } else {
+                totalValue.innerHTML = total;
+            }
+        } else {
+            this.value = '';
+            totalValue.innerHTML = 0;
+        }
+    });
+
+    resDays.addEventListener('change', function () {
+        daysSum = +this.value;
+        if (Number.isInteger(daysSum) && daysSum > 0) {
+            total = (daysSum + personsSum) * 4000;
+            if (persons.value == '') {
+                totalValue.innerHTML = 0;
+            } else {
+                totalValue.innerHTML = total;
+            }
+        } else {
+            this.value = '';
+            totalValue.innerHTML = 0;
+        }
+    });
+
+    place.addEventListener('change', function () {
+        if (resDays.value == '' || persons.value == '') {
+            totalValue.innerHTML = 0;
+        } else {
+            let a = total;
+            totalValue.innerHTML = a * this.options[this.selectedIndex].value;
+        }
+    })
+
 });
